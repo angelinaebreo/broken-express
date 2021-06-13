@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 
 // Configuration
 const app = express(); // app is an instance of express
-dotenv.config(); // places the variables from .env file into process.env
+require("dotenv").config(); // places the variables from .env file into process.env
 const PORT = process.env.PORT || 3000;
 
 /*
@@ -17,6 +17,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use((req, res, next) => {
   console.log("INCOMING REQUEST: ", req.method, req.path);
+  next();
 });
 
 // Routes
@@ -25,6 +26,18 @@ app.get("/", (req, res) => {
 });
 
 app.get("/burger", (req, res) => {
+  const { topping } = req.query;
   let msg = "here's your burger";
-  res.send(msg);
+console.log(req.query)
+  if (topping) {
+    res.send(msg + ` with ${topping}`);
+  } else {
+    res.send(msg);
+  }
 });
+
+app.listen(PORT, () => {
+  console.log(`[development] Listening on port: ${PORT}`);
+});
+
+module.exports = app;

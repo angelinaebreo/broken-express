@@ -29,15 +29,19 @@ const magic8Responses = [
   "Very doubtful",
 ];
 
-const randomResponse = magic8Responses[Math.floor(Math.random() * Math.length)];
-
 // Problem: Every time I visit the /magic8 route in the browser, it sends me
 //          the same random response. I want a different random response each time.
 //          help me fix this!
 app.get("/magic8", (req, res) => {
-  res.send(randomResponse);
+  const randomNumber = Math.floor(Math.random() * magic8Responses.length-2);
+  const randomResponse = magic8Responses.splice(randomNumber, 1);
+  console.log(randomResponse)
+  magic8Responses.push(...randomResponse)
+  res.send(...randomResponse);
 });
 
 app.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
 });
+
+module.exports = app;
